@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulação da Reforma Tributária — Térreo | Calculadora gratuita IBS/CBS para Incorporadoras e Loteadoras</title>
+<meta name="description" content="Descubra quanto sua empresa vai pagar de IBS/CBS a partir de 2027 e qual o regime tributário mais vantajoso. Calculadora gratuita criada pela Térreo, 1ª startup de tributação imobiliária do Brasil.">
+<style>
+/* ====== RESET & TOKENS ====== */
+:root{
+  --verde:#1d4d3a; --verde-claro:#2e7d5b; --verde-escuro:#152f25;
+  --areia:#f6f3ee; --areia-claro:#faf8f5;
+  --ink:#1d2521; --cinza:#6b7570; --borda:#dfdad2;
+  --branco:#fff; --destaque:#c8a24b; --destaque-claro:#d9b46b;
+  --ok:#1f7a4d; --ruim:#a4452f;
+  --r:8px; --shadow:0 4px 20px rgba(0,0,0,.08);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--areia-claro);color:var(--ink);font-size:15px;line-height:1.6}
+
+/* ====== NAV ====== */
+nav{position:sticky;top:0;z-index:100;background:var(--verde);box-shadow:0 2px 12px rgba(0,0,0,.2)}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 28px;height:60px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.nav-logo{color:#fff;font-size:18px;font-weight:700;letter-spacing:-.3px;text-decoration:none;flex-shrink:0}
+.nav-logo span{color:var(--destaque)}
+.nav-links{display:flex;gap:24px;list-style:none}
+.nav-links a{color:rgba(255,255,255,.85);text-decoration:none;font-size:13.5px;font-weight:500;transition:.15s}
+.nav-links a:hover{color:#fff}
+.nav-cta{background:var(--destaque);color:#fff!important;padding:8px 18px;border-radius:20px;font-weight:700!important;font-size:13px!important;white-space:nowrap}
+.nav-cta:hover{background:var(--destaque-claro)!important}
+@media(max-width:680px){.nav-links{display:none}}
+
+/* ====== HERO ====== */
+.hero{background:linear-gradient(135deg,var(--verde-escuro) 0%,var(--verde) 60%,#25664d 100%);color:#fff;padding:80px 28px 90px;text-align:center}
+.hero-tag{display:inline-block;background:rgba(200,162,75,.25);border:1px solid var(--destaque);color:var(--destaque-claro);font-size:12px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:4px 14px;border-radius:20px;margin-bottom:22px}
+.hero h1{font-size:clamp(26px,4vw,46px);font-weight:800;line-height:1.2;max-width:820px;margin:0 auto 20px;letter-spacing:-.5px}
+.hero h1 span{color:var(--destaque)}
+.hero p{font-size:clamp(15px,2vw,18px);max-width:620px;margin:0 auto 36px;opacity:.88;line-height:1.7}
+.hero-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.btn-primary{background:var(--destaque);color:#fff;text-decoration:none;font-weight:700;font-size:16px;padding:15px 32px;border-radius:30px;box-shadow:0 4px 20px rgba(200,162,75,.4);transition:.2s;display:inline-block}
+.btn-primary:hover{background:var(--destaque-claro);transform:translateY(-1px)}
+.btn-outline{border:2px solid rgba(255,255,255,.5);color:#fff;text-decoration:none;font-weight:600;font-size:15px;padding:13px 28px;border-radius:30px;transition:.2s;display:inline-block}
+.btn-outline:hover{border-color:#fff;background:rgba(255,255,255,.08)}
+.hero-note{font-size:12.5px;opacity:.6;margin-top:20px}
+
+/* ====== STATS STRIP ====== */
+.stats{background:var(--branco);border-bottom:1px solid var(--borda)}
+.stats-inner{max-width:1200px;margin:0 auto;padding:0 28px;display:grid;grid-template-columns:repeat(2,1fr)}
+.stat{padding:28px 24px;text-align:center;border-right:1px solid var(--borda)}
+.stat:last-child{border-right:none}
+.stat-num{font-size:32px;font-weight:800;color:var(--verde);line-height:1}
+.stat-label{font-size:13px;color:var(--cinza);margin-top:6px;line-height:1.4}
+@media(max-width:600px){.stats-inner{grid-template-columns:1fr}.stat{border-right:none;border-bottom:1px solid var(--borda)}.stat:last-child{border-bottom:none}}
+
+/* ====== SECTION GENERIC ====== */
+.section{padding:72px 28px}
+.section-inner{max-width:1200px;margin:0 auto}
+.section-tag{font-size:11.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--destaque);margin-bottom:10px}
+.section h2{font-size:clamp(22px,3vw,34px);font-weight:800;color:var(--verde);line-height:1.25;margin-bottom:14px;letter-spacing:-.3px}
+.section .lead{font-size:16.5px;color:var(--cinza);max-width:640px;line-height:1.7;margin-bottom:40px}
+
+/* ====== POR QUE AGORA ====== */
+.urgencia{background:var(--areia)}
+.urgencia-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.urgencia-txt h2{margin-bottom:18px}
+.urgencia-txt p{font-size:15.5px;color:var(--cinza);line-height:1.8;margin-bottom:16px}
+.urgencia-txt .destaque-txt{background:rgba(200,162,75,.12);border-left:4px solid var(--destaque);padding:14px 18px;border-radius:0 var(--r) var(--r) 0;font-size:14.5px;font-weight:600;color:var(--ink);margin-top:8px}
+.urgencia-cards{display:flex;flex-direction:column;gap:14px}
+.ucard{background:var(--branco);border:1px solid var(--borda);border-radius:var(--r);padding:18px 20px;box-shadow:var(--shadow)}
+.ucard-icon{font-size:22px;margin-bottom:8px}
+.ucard-title{font-weight:700;color:var(--verde);margin-bottom:4px;font-size:14.5px}
+.ucard-desc{font-size:13.5px;color:var(--cinza);line-height:1.5}
+@media(max-width:768px){.urgencia-grid{grid-template-columns:1fr}}
+
+/* ====== COMO FUNCIONA ====== */
+.steps{background:var(--branco)}
+.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:8px}
+.step{text-align:center;padding:32px 20px}
+.step-num{width:52px;height:52px;border-radius:50%;background:var(--verde);color:#fff;font-size:22px;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 18px}
+.step h3{font-size:16px;font-weight:700;color:var(--verde);margin-bottom:8px}
+.step p{font-size:14px;color:var(--cinza);line-height:1.6}
+@media(max-width:640px){.steps-grid{grid-template-columns:1fr}}
+
+/* ====== CALCULADORA ====== */
+.calc-section{background:var(--areia);padding:72px 0 80px}
+.calc-header{max-width:1280px;margin:0 auto;padding:0 28px 28px;text-align:center}
+.calc-wrap{max-width:1280px;margin:0 auto;padding:0 28px}
+/* Estilos internos da calculadora */
+.calc-wrap h2.sec{font-size:15px;color:var(--verde);margin:26px 0 10px;border-bottom:2px solid var(--verde);padding-bottom:5px}
+.calc-wrap details{background:var(--branco);border:1px solid var(--borda);border-radius:var(--r);margin-bottom:10px}
+.calc-wrap details>summary{cursor:pointer;padding:11px 16px;font-weight:600;color:var(--verde);font-size:13.5px;list-style:none;display:flex;justify-content:space-between;align-items:center}
+.calc-wrap details>summary::after{content:"▸";transition:.15s;flex-shrink:0}
+.calc-wrap details[open]>summary::after{transform:rotate(90deg)}
+.calc-wrap .inner{padding:4px 16px 16px;border-top:1px solid var(--borda)}
+.calc-wrap .grid{display:flex;flex-wrap:wrap;gap:12px}
+.calc-wrap .campo{display:flex;flex-direction:column;gap:3px;min-width:150px;flex:1}
+.calc-wrap .campo label{font-size:11.5px;color:var(--cinza);font-weight:600}
+.calc-wrap input,.calc-wrap select{padding:7px 9px;border:1px solid var(--borda);border-radius:6px;font-size:13.5px;background:#fff;width:100%}
+.calc-wrap input:focus,.calc-wrap select:focus{outline:2px solid var(--verde-claro);border-color:transparent}
+.calc-wrap table{width:100%;border-collapse:collapse;font-size:12.5px;background:#fff}
+.calc-wrap th,.calc-wrap td{border:1px solid var(--borda);padding:5px 8px;text-align:right;white-space:nowrap}
+.calc-wrap th{background:#eef0ec;color:var(--verde);font-size:11.5px}
+.calc-wrap td:first-child,.calc-wrap th:first-child{text-align:left}
+.calc-wrap td input{padding:4px 6px;font-size:12.5px;text-align:right;min-width:128px;width:100%;border-radius:4px}
+.calc-wrap .tblwrap{overflow-x:auto;margin-top:8px}
+.calc-wrap .total td{font-weight:700;background:#f3f1ec}
+.calc-wrap .secao td.tit{font-weight:700;background:#eef0ec;color:var(--verde)}
+.calc-wrap .nota{font-size:12px;color:var(--cinza);margin-top:6px;line-height:1.5}
+.calc-wrap .linha-construcao{display:flex;gap:8px;margin-bottom:6px;align-items:center}
+.calc-wrap .linha-construcao select,.calc-wrap .linha-construcao input{width:auto}
+.calc-wrap .rm{background:#b3543d;color:#fff;border:none;border-radius:4px;padding:5px 10px;cursor:pointer;font-size:13px}
+/* Cards de resultado */
+.result-box{background:var(--branco);border:1px solid var(--borda);border-radius:var(--r);padding:24px 28px;margin:20px 0 10px;box-shadow:var(--shadow)}
+.result-box .rotulo{font-size:12px;color:var(--cinza);font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.result-box .valor-big{font-size:40px;font-weight:800;color:var(--verde);margin:6px 0 4px;line-height:1}
+.result-box .sub{font-size:13.5px;color:var(--cinza)}
+.result-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:10px}
+.rcard{background:var(--areia);border:1px solid var(--borda);border-radius:var(--r);padding:16px 18px;text-align:center}
+.rcard .rl{font-size:11.5px;color:var(--cinza);font-weight:600;text-transform:uppercase;letter-spacing:.3px}
+.rcard .rv{font-size:16px;font-weight:700;color:var(--verde);margin-top:6px}
+.rcard .rv.lock{color:#aaa;font-size:14px}
+@media(max-width:640px){.result-grid{grid-template-columns:1fr}}
+/* recalc btn */
+#btnRecalc{position:fixed;bottom:24px;right:24px;z-index:50;background:var(--destaque);color:#fff;border:none;
+  font-size:14px;padding:13px 22px;border-radius:30px;box-shadow:0 4px 14px rgba(0,0,0,.25);cursor:pointer;font-weight:600}
+#btnRecalc:hover{background:var(--destaque-claro)}
+#btnRecalc.flash{animation:pulse .5s}
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.08)}100%{transform:scale(1)}}
+.neg{color:var(--ruim)}.pos{color:var(--ok)}
+/* botão genérico dentro da calculadora */
+.calc-wrap button[type=button]:not(#btnRecalc){background:var(--verde);color:#fff;border:none;border-radius:6px;padding:7px 14px;font-size:13px;cursor:pointer;font-weight:600}
+.calc-wrap button[type=button]:not(#btnRecalc):hover{background:var(--verde-claro)}
+
+/* ====== RELATÓRIO ====== */
+.relatorio{background:var(--verde);color:#fff;padding:80px 28px}
+.relatorio-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
+.relatorio-txt .tag{display:inline-block;background:rgba(200,162,75,.25);border:1px solid var(--destaque);color:var(--destaque-claro);font-size:11.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:4px 12px;border-radius:20px;margin-bottom:18px}
+.relatorio-txt h2{font-size:clamp(22px,3vw,32px);font-weight:800;color:#fff;line-height:1.2;margin-bottom:16px}
+.relatorio-txt p{font-size:15px;opacity:.85;line-height:1.8;margin-bottom:24px}
+.checklist{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:32px}
+.checklist li{display:flex;align-items:flex-start;gap:10px;font-size:14px;opacity:.9}
+.checklist li::before{content:"✓";color:var(--destaque);font-weight:700;font-size:16px;flex-shrink:0;margin-top:1px}
+.relatorio-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:32px}
+.relatorio-card .preco-label{font-size:12px;opacity:.65;font-weight:600;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px}
+.relatorio-card .preco{font-size:48px;font-weight:800;color:var(--destaque);line-height:1;margin-bottom:4px}
+.relatorio-card .preco-sub{font-size:13px;opacity:.65;margin-bottom:28px}
+.relatorio-card .btn-comprar{display:block;text-align:center;background:var(--destaque);color:#fff;text-decoration:none;font-weight:700;font-size:16px;padding:16px;border-radius:10px;box-shadow:0 4px 20px rgba(200,162,75,.4);transition:.2s;margin-bottom:14px}
+.relatorio-card .btn-comprar:hover{background:var(--destaque-claro)}
+.relatorio-card .btn-contato{display:block;text-align:center;color:rgba(255,255,255,.7);font-size:13.5px;text-decoration:none;transition:.15s}
+.relatorio-card .btn-contato:hover{color:#fff}
+.relatorio-card .garantia{font-size:12px;opacity:.55;text-align:center;margin-top:18px;line-height:1.5}
+@media(max-width:768px){.relatorio-inner{grid-template-columns:1fr;gap:40px}}
+
+/* ====== SOBRE ====== */
+.sobre{background:var(--areia);padding:80px 28px}
+.sobre-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:auto 1fr;gap:56px;align-items:start}
+.sobre-avatar{width:160px;height:160px;border-radius:50%;background:linear-gradient(135deg,var(--verde),var(--verde-claro));display:flex;align-items:center;justify-content:center;color:#fff;font-size:52px;font-weight:800;flex-shrink:0;box-shadow:0 8px 32px rgba(29,77,58,.25)}
+.sobre-txt .section-tag{margin-bottom:6px}
+.sobre-txt h2{font-size:clamp(20px,2.5vw,30px);font-weight:800;color:var(--verde);margin-bottom:8px}
+.sobre-txt .cargo{font-size:14px;color:var(--destaque);font-weight:700;margin-bottom:16px}
+.sobre-txt p{font-size:15px;color:var(--cinza);line-height:1.8;margin-bottom:14px}
+.sobre-nums{display:flex;gap:32px;margin-top:20px;flex-wrap:wrap}
+.sobre-num .n{font-size:28px;font-weight:800;color:var(--verde)}
+.sobre-num .l{font-size:12.5px;color:var(--cinza)}
+@media(max-width:640px){.sobre-inner{grid-template-columns:1fr;text-align:center}.sobre-avatar{margin:0 auto}.sobre-nums{justify-content:center}}
+
+/* ====== FAQ ====== */
+.faq{background:var(--branco);padding:80px 28px}
+.faq-inner{max-width:820px;margin:0 auto}
+.faq-inner h2{text-align:center;margin-bottom:40px}
+.faq-item{border-bottom:1px solid var(--borda);padding:20px 0}
+.faq-item:last-child{border-bottom:none}
+.faq-q{font-weight:700;color:var(--verde);font-size:15.5px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;user-select:none}
+.faq-q::after{content:"+";font-size:22px;color:var(--destaque);flex-shrink:0;line-height:1}
+.faq-item.open .faq-q::after{content:"−"}
+.faq-a{font-size:14.5px;color:var(--cinza);line-height:1.8;max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s}
+.faq-item.open .faq-a{max-height:500px;padding-top:12px}
+
+/* ====== FOOTER ====== */
+footer{background:var(--verde-escuro);color:rgba(255,255,255,.7);padding:48px 28px 32px}
+.footer-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:48px}
+.footer-brand{color:#fff;font-size:20px;font-weight:700;margin-bottom:10px}
+.footer-brand span{color:var(--destaque)}
+.footer-desc{font-size:13.5px;line-height:1.7}
+.footer-col h4{color:#fff;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin-bottom:14px}
+.footer-col a{display:block;color:rgba(255,255,255,.65);text-decoration:none;font-size:13.5px;margin-bottom:8px;transition:.15s}
+.footer-col a:hover{color:#fff}
+.footer-bottom{max-width:1200px;margin:32px auto 0;padding-top:24px;border-top:1px solid rgba(255,255,255,.1);display:flex;justify-content:space-between;font-size:12.5px;flex-wrap:wrap;gap:8px}
+@media(max-width:680px){.footer-inner{grid-template-columns:1fr}.footer-bottom{flex-direction:column}}
+</style>
+</head>
+<body>
+
+<!-- ====== NAV ====== -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">Térreo<span>.</span></a>
+    <ul class="nav-links">
+      <li><a href="#por-que">A Reforma</a></li>
+      <li><a href="#como-funciona">Como funciona</a></li>
+      <li><a href="#calculadora">Calculadora</a></li>
+      <li><a href="#relatorio">Relatório</a></li>
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#relatorio" class="nav-cta">Adquirir relatório — R$ 1.479</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ====== HERO ====== -->
+<section class="hero">
+  <div class="hero-tag">Calculadora gratuita — IBS e CBS para Incorporadoras e Loteadoras</div>
+  <h1>A Reforma Tributária muda tudo.<br>Quanto vai impactar o <span>seu</span> empreendimento?</h1>
+  <p>Simule gratuitamente o IBS e o CBS no seu projeto de incorporação ou loteamento e descubra qual regime tributário pode gerar mais economia a partir de 2027.</p>
+  <div class="hero-btns">
+    <a href="#calculadora" class="btn-primary">Simular gratuitamente →</a>
+    <a href="#relatorio" class="btn-outline">Ver relatório completo</a>
+  </div>
+  <p class="hero-note">Sem cadastro. Sem compartilhamento de dados. O cálculo roda no seu navegador.</p>
+</section>
+
+<!-- ====== STATS ====== -->
+<div class="stats">
+  <div class="stats-inner">
+    <div class="stat">
+      <div class="stat-num">2027–2033</div>
+      <div class="stat-label">período de transição gradual<br>de alíquotas do IBS e CBS</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">até 2028</div>
+      <div class="stat-label">empreendimentos lançados com direito ao Regime Opcional (arts. 485–486 da LC 214/25)</div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== POR QUE AGORA ====== -->
+<section class="section urgencia" id="por-que">
+  <div class="section-inner">
+    <div class="urgencia-grid">
+      <div class="urgencia-txt">
+        <div class="section-tag">Por que agora?</div>
+        <h2>2026 é o ano mais estratégico da última geração para o mercado imobiliário</h2>
+        <p>A LC 214/2025 institui o IBS e o CBS — os novos tributos sobre o consumo — que substituirão ICMS, ISS, PIS e Cofins. Para incorporadoras e loteadoras, as regras são específicas e o impacto pode ser expressivo.</p>
+        <p>Empreendimentos lançados até 2028 têm a opção de manter o regime atual (RET ou Lucro Presumido) ou migrar para o regime de Débito e Crédito do IBS/CBS. A escolha errada pode custar centenas de milhares de reais por empreendimento.</p>
+        <div class="destaque-txt">
+          O ano de 2026 concentra as maiores oportunidades de planejamento tributário imobiliário dos últimos 30 anos — e o tempo para agir é agora.
+        </div>
+      </div>
+      <div class="urgencia-cards">
+        <div class="ucard">
+          <div class="ucard-icon">⚖️</div>
+          <div class="ucard-title">Dois regimes disponíveis</div>
+          <div class="ucard-desc">Débito e Crédito (não cumulativo) vs. Regime Opcional (RET ou Lucro Presumido). A vantagem depende de cada projeto.</div>
+        </div>
+        <div class="ucard">
+          <div class="ucard-icon">📉</div>
+          <div class="ucard-title">Redutores exclusivos para imóveis</div>
+          <div class="ucard-desc">Redutor de Ajuste, Redutor Social e créditos de transição ICMS/ISS reduzem significativamente a base do IBS/CBS.</div>
+        </div>
+        <div class="ucard">
+          <div class="ucard-icon">🗓️</div>
+          <div class="ucard-title">Janela de oportunidade limitada</div>
+          <div class="ucard-desc">Apenas empreendimentos lançados até 31/12/2028 têm acesso ao Regime Opcional. Depois disso, só o regime de Débito e Crédito.</div>
+        </div>
+        <div class="ucard">
+          <div class="ucard-icon">🏗️</div>
+          <div class="ucard-title">Estoque em 31/12/2026 vale ouro</div>
+          <div class="ucard-desc">Unidades e terrenos em nome da empresa nessa data geram o Redutor de Ajuste — uma dedução que pode ser substancial na base de cálculo.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== COMO FUNCIONA ====== -->
+<section class="section steps" id="como-funciona">
+  <div class="section-inner">
+    <div style="text-align:center">
+      <div class="section-tag">Como funciona</div>
+      <h2>Três passos para conhecer o impacto no seu projeto</h2>
+    </div>
+    <div class="steps-grid">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Preencha as premissas</h3>
+        <p>Informe o tipo de empreendimento, VGV por ano, custo de construção, terreno e demais dados. Tudo fica no seu navegador — nenhum dado é enviado.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>O simulador calcula</h3>
+        <p>O motor de cálculo apura o IBS e o CBS nos dois regimes, com Redutor de Ajuste atualizado pelo IPCA, Redutor Social e créditos de transição.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Veja o ganho potencial</h3>
+        <p>O resultado mostra o potencial de economia entre os dois regimes. Para a análise detalhada com todos os números, adquira o relatório completo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== CALCULADORA ====== -->
+<section class="calc-section" id="calculadora">
+  <div class="calc-header">
+    <div class="section-tag">Calculadora gratuita</div>
+    <h2 style="font-size:clamp(22px,3vw,34px);font-weight:800;color:var(--verde)">Simule o seu empreendimento</h2>
+    <p style="color:var(--cinza);font-size:16px;margin-top:8px">Preencha as premissas abaixo. O resultado aparece automaticamente.</p>
+  </div>
+  <div class="calc-wrap">
+
+    <h2 class="sec">1. Premissas</h2>
+
+    <details open>
+      <summary>Dados do empreendimento</summary>
+      <div class="inner grid">
+        <div class="campo"><label>Tipo</label>
+          <select id="tipo">
+            <option value="RET4">Incorporação RET 4%</option>
+            <option value="RET1">Incorporação RET 1%</option>
+            <option value="MISTO">Incorporação RET 1% e RET 4%</option>
+            <option value="LOT">Loteamento</option>
+          </select></div>
+        <div class="campo" id="campoRetPC" style="display:none"><label>Alíquota média RET — PIS e Cofins (%)</label><input id="aRetPC" type="number" step="0.001" value="1.615"></div>
+        <div class="campo" id="campoRetIR" style="display:none"><label>Alíquota média RET — IRPJ e CSLL (%)</label><input id="aRetIR" type="number" step="0.001" value="1.485"></div>
+        <div class="campo"><label>% unidades em estoque em 31/12/2026 passíveis de venda</label><input id="pctEstoque" type="number" step="0.01" value="40"></div>
+        <div class="campo"><label>Valor de mercado do estoque em 31/12/2026</label><input id="valorReferencia" type="text" class="money" value="R$ 50.000.000,00"></div>
+        <div class="campo" id="campoPctLot" style="display:none"><label>% receita do loteador (parceria PN 15/84)</label><input id="pctLoteador" type="number" step="0.01" value="100"></div>
+        <div class="campo" id="campoPctArea" style="display:none"><label>% área doada (loteamento)</label><input id="pctAreaDoada" type="number" step="0.01" value="0"></div>
+        <div class="campo" id="campoPctInc"><label>% receita do incorporador</label><input id="pctIncorporador" type="number" step="0.01" value="100"></div>
+      </div>
+    </details>
+
+    <details open>
+      <summary>Vendas a partir de 2027</summary>
+      <div class="inner tblwrap"><table id="tblVendas"></table></div>
+    </details>
+
+    <details open>
+      <summary>Terreno e construção até 2026 (Redutor de Ajuste)</summary>
+      <div class="inner">
+        <div class="grid" style="margin-bottom:12px">
+          <div class="campo"><label>Ano de aquisição do terreno (até 2026)</label>
+            <select id="terrenoAno">
+              <option value="NA">Não aplicável — aquisição a partir de 2027</option>
+            </select></div>
+          <div class="campo"><label>Valor de aquisição do terreno, sem IBS/CBS</label><input id="terrenoValor" type="text" class="money" value="R$ 10.000.000,00"></div>
+        </div>
+        <label style="font-size:11.5px;color:var(--cinza);font-weight:600">Custo de construção até 2026 (por ano)</label>
+        <div id="construcoes" style="margin-top:6px"></div>
+        <button type="button" onclick="addConstrucao()">+ adicionar ano de construção</button>
+        <p class="nota">Terreno e construção até 2026 são atualizados pelo IPCA histórico e multiplicados pelo % de estoque. O Redutor de Ajuste será o maior entre esse custo atualizado e o valor de mercado do estoque.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>Redutor de Ajuste — terreno adquirido a partir de 2027</summary>
+      <div class="inner">
+        <div class="tblwrap"><table id="tblRAcompra"></table></div>
+        <div class="campo" style="margin-top:12px;max-width:680px"><label>Hipótese de aquisição do terreno</label>
+          <select id="raHipotese"></select></div>
+        <div class="tblwrap"><table id="tblRA"></table></div>
+        <p class="nota" id="raPreenchidas"></p>
+        <p class="nota">Selecione a hipótese e informe os valores no ano da operação. Os valores das demais hipóteses continuam valendo no cálculo.</p>
+      </div>
+    </details>
+
+    <details>
+      <summary>Contrapartidas ambientais e urbanísticas (a partir de 2027)</summary>
+      <div class="inner tblwrap"><table id="tblContrap"></table>
+      <p class="nota">O modelo adota automaticamente o maior entre a contrapartida incorrida/estimada e a calculada pelo % de área doada sobre a receita líquida.</p></div>
+    </details>
+
+    <details open>
+      <summary>Custos e despesas a partir de 2027</summary>
+      <div class="inner tblwrap"><table id="tblCustos"></table>
+      <p class="nota">Valores com a carga tributária atual (PIS/Cofins, ISS, ICMS, IPI embutidos). O simulador converte para o novo cenário com IBS/CBS conforme a transição.</p></div>
+    </details>
+
+    <details>
+      <summary>Alíquotas e IPCA</summary>
+      <div class="inner grid">
+        <div class="campo"><label>ITBI (%)</label><input id="aItbi" type="number" step="0.01" value="3"></div>
+        <div class="campo"><label>PIS/Cofins serviço (%)</label><input id="aPcServ" type="number" step="0.01" value="3.65"></div>
+        <div class="campo"><label>PIS/Cofins material (%)</label><input id="aPcMat" type="number" step="0.01" value="9.25"></div>
+        <div class="campo"><label>ISS médio (%)</label><input id="aIss" type="number" step="0.01" value="2"></div>
+        <div class="campo"><label>ICMS médio (%)</label><input id="aIcms" type="number" step="0.01" value="18"></div>
+        <div class="campo"><label>IPI médio (%)</label><input id="aIpi" type="number" step="0.01" value="10"></div>
+        <div class="campo"><label>IPCA anual a partir de 2027 (%)</label><input id="aIpca" type="number" step="0.01" value="5"></div>
+      </div>
+    </details>
+
+    <h2 class="sec" style="margin-top:32px">2. Resultado</h2>
+
+    <div class="result-box" style="border-left:5px solid var(--destaque)">
+      <div class="rotulo">Ganho tributário potencial no período (2027–2033+)</div>
+      <div class="valor-big" id="cEconomia">—</div>
+      <div class="sub">diferença entre o melhor e o pior regime para este empreendimento</div>
+    </div>
+
+    <div class="result-grid">
+      <div class="rcard">
+        <div class="rl">Regime mais vantajoso</div>
+        <div class="rv lock">🔒 no relatório</div>
+      </div>
+      <div class="rcard">
+        <div class="rl">Carga tributária comparativa</div>
+        <div class="rv lock">🔒 no relatório</div>
+      </div>
+      <div class="rcard">
+        <div class="rl">Créditos e apuração detalhada</div>
+        <div class="rv lock">🔒 no relatório</div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:28px">
+      <a href="#relatorio" class="btn-primary" style="font-size:15px">Ver o relatório completo — R$ 1.479 →</a>
+      <p style="font-size:12.5px;color:var(--cinza);margin-top:10px">Cálculos com base na LC 214/2025. Esta simulação é uma estimativa para apoio à decisão e não substitui apuração fiscal formal.</p>
+    </div>
+
+  </div><!-- /calc-wrap -->
+</section>
+
+<!-- ====== RELATÓRIO ====== -->
+<section class="relatorio" id="relatorio">
+  <div class="relatorio-inner">
+    <div class="relatorio-txt">
+      <div class="tag">Relatório completo em PDF</div>
+      <h2>Tudo que você precisa para tomar a decisão certa</h2>
+      <p>O simulador gratuito mostra o ganho tributário potencial. O relatório completo, emitido pela Térreo com as premissas do seu empreendimento, detalha:</p>
+      <ul class="checklist">
+        <li>Apuração de IBS e CBS ano a ano (2027 a 2033+) nos dois regimes</li>
+        <li>Bases de cálculo e alíquotas na transição</li>
+        <li>Redutor de Ajuste atualizado pelo IPCA — composição e aproveitamento por ano</li>
+        <li>Redutor Social por unidade residencial</li>
+        <li>Créditos de IBS/CBS sobre todos os insumos</li>
+        <li>Dedução ICMS/ISS na apuração do IBS</li>
+        <li>Regime Opcional (RET ou Lucro Presumido) detalhado</li>
+        <li>Resumo comparativo completo — fluxo e carga tributária</li>
+        <li>Recomendação fundamentada do regime mais vantajoso</li>
+      </ul>
+    </div>
+    <div class="relatorio-card">
+      <div class="preco-label">Investimento</div>
+      <div class="preco">R$ 1.479</div>
+      <div class="preco-sub">por empreendimento · relatório em PDF</div>
+      <a href="PAYMENT_LINK_AQUI" class="btn-comprar" id="btnComprar">Adquirir relatório completo</a>
+      <a href="mailto:claudio.ricaldoni@terreo.io?subject=Relatório IBS/CBS — calculadora Térreo" class="btn-contato" id="btnContato">ou fale diretamente com a Térreo →</a>
+      <div class="garantia">Após o pagamento, você receberá o relatório em PDF com as premissas do empreendimento simulado. Dúvidas? Entre em contato antes de comprar.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== SOBRE ====== -->
+<section class="sobre" id="sobre">
+  <div class="sobre-inner">
+    <div class="sobre-avatar">CR</div>
+    <div class="sobre-txt">
+      <div class="section-tag">Quem faz isso</div>
+      <h2>Cláudio Ricaldoni</h2>
+      <div class="cargo">Fundador da Térreo · Tributarista Imobiliário</div>
+      <p>Tributarista há mais de 30 anos, com os últimos 16 dedicados exclusivamente à tributação imobiliária. Acompanhou a Reforma Tributária desde antes das primeiras leis e normativos — e foi um dos primeiros profissionais a quantificar o impacto para incorporadoras e loteadoras.</p>
+      <p>A Térreo é a 1ª startup de tributação imobiliária do Brasil, com o propósito de entregar "imposto na medida certa". Nossa calculadora traduz a complexidade da LC 214/2025 em números que o empreendedor imobiliário pode usar para tomar decisões estratégicas.</p>
+      <div class="sobre-nums">
+        <div class="sobre-num"><div class="n">30+</div><div class="l">anos de tributação</div></div>
+        <div class="sobre-num"><div class="n">16</div><div class="l">anos dedicados ao mercado imobiliário</div></div>
+        <div class="sobre-num"><div class="n">LC 214</div><div class="l">análise antes da publicação</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ====== FAQ ====== -->
+<section class="faq" id="faq">
+  <div class="faq-inner">
+    <div class="section-tag" style="text-align:center">Dúvidas frequentes</div>
+    <h2 style="color:var(--verde)">Perguntas frequentes</h2>
+
+    <div class="faq-item">
+      <div class="faq-q">O que é o IBS e a CBS?</div>
+      <div class="faq-a">O IBS (Imposto sobre Bens e Serviços) e a CBS (Contribuição sobre Bens e Serviços) são os novos tributos criados pela Reforma Tributária (LC 214/2025) para substituir, respectivamente, o ICMS+ISS e o PIS+Cofins. Para o mercado imobiliário, as alíquotas são reduzidas em 50% e existem redutores específicos como o Redutor de Ajuste e o Redutor Social.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">A calculadora serve para qualquer empreendimento?</div>
+      <div class="faq-a">A calculadora foi desenvolvida para incorporações imobiliárias (tributadas pelo RET 4%, RET 1% ou híbrido RET 1%+4%) e loteamentos, para empreendimentos lançados até 2028. Os cálculos são por empreendimento — as conclusões podem variar significativamente de um projeto para outro.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Os meus dados ficam armazenados?</div>
+      <div class="faq-a">Não. Todo o cálculo roda diretamente no seu navegador. Nenhum dado é enviado para servidores ou armazenado em qualquer banco de dados. Você tem total privacidade.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">O que é o Redutor de Ajuste e por que ele importa?</div>
+      <div class="faq-a">O Redutor de Ajuste (arts. 257–258 da LC 214/25) é uma dedução da base de cálculo do IBS e da CBS que busca preservar a lógica do IVA — tributar apenas o valor agregado. Para imóveis em estoque ou com terreno em 31/12/2026, ele pode ser calculado pelo custo atualizado pelo IPCA ou pelo valor de referência de mercado. Empreendimentos com grandes estoques em 2026 podem ter reduções expressivas na carga tributária pelo regime de Débito e Crédito.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Quando recebo o relatório após o pagamento?</div>
+      <div class="faq-a">Após a confirmação do pagamento, a Térreo entra em contato para confirmar as premissas e emite o relatório em PDF. O prazo é de até 2 dias úteis. Se tiver dúvidas antes de adquirir, fale diretamente com a equipe pelo e-mail claudio.ricaldoni@terreo.io.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ====== FOOTER ====== -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">Térreo<span>.</span></div>
+      <p class="footer-desc">Térreo Tecnologia e Inteligência Tributária Ltda.<br>A 1ª startup de tributação imobiliária do Brasil.<br>"Imposto na medida certa."</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navegação</h4>
+      <a href="#por-que">A Reforma</a>
+      <a href="#como-funciona">Como funciona</a>
+      <a href="#calculadora">Calculadora</a>
+      <a href="#relatorio">Relatório</a>
+      <a href="#sobre">Sobre</a>
+      <a href="#faq">Dúvidas</a>
+    </div>
+    <div class="footer-col">
+      <h4>Contato</h4>
+      <a href="mailto:claudio.ricaldoni@terreo.io">claudio.ricaldoni@terreo.io</a>
+      <a href="https://www.terreo.io" target="_blank">terreo.io</a>
+      <a href="https://www.linkedin.com/in/cláudio-ricaldoni" target="_blank">LinkedIn</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Térreo Tecnologia e Inteligência Tributária Ltda. Todos os direitos reservados.</span>
+    <span>Cálculos com base na LC 214/2025 — estimativa para apoio à decisão.</span>
+  </div>
+</footer>
+
+<button id="btnRecalc" type="button">↻ Recalcular</button>
+
+<script>
+// ============================================================
+// MOTOR DE CÁLCULO — réplica fiel da planilha (validado célula a célula)
+// ============================================================
+const IPCA_HIST = {
+  2000:0.0597, 2001:0.0767, 2002:0.1253, 2003:0.0930, 2004:0.0760,
+  2005:0.0569, 2006:0.0314, 2007:0.0446, 2008:0.0590, 2009:0.0431,
+  2010:0.0591, 2011:0.0650, 2012:0.0584, 2013:0.0591, 2014:0.0641,
+  2015:0.1067, 2016:0.0629, 2017:0.0295, 2018:0.0375, 2019:0.0431,
+  2020:0.0452, 2021:0.1006, 2022:0.0579, 2023:0.0462, 2024:0.0483,
+  2025:0.0426, 2026:0.0500
+};
+function ipcaAcumAte2026(ano){ if(ano>=2026) return 0; let f=1; for(let a=ano+1;a<=2026;a++) f*=(1+(IPCA_HIST[a]??0)); return f-1; }
+const N=7, ANOS=[2027,2028,2029,2030,2031,2032,2033];
+const ROT_ANOS=['2027','2028','2029','2030','2031','2032','2033 em diante'];
+const FATOR_ICMS_ISS=[1,1,0.9,0.8,0.7,0.6,0];
+const PCT_IBS=[1,1,0.1,0.2,0.3,0.4,1];
+const IBS_STD=[0.001,0.001,0.185,0.185,0.185,0.185,0.185];
+const CBS_STD=IBS_STD.map((b,i)=>i<2?0.085-b:0.085);
+const REDUCAO_IMOB=0.5;
+
+function compute(inp){
+  const A=inp.aliq, sum=a=>a.reduce((x,y)=>x+y,0);
+  const aliqCBSimob=CBS_STD.map(c=>c*(1-REDUCAO_IMOB));
+  const aliqIBSimob=IBS_STD.map((b,y)=>b*PCT_IBS[y]*(1-REDUCAO_IMOB));
+  const aliqImob=aliqCBSimob.map((c,y)=>c+aliqIBSimob[y]);
+  const rateFull=CBS_STD.map((c,y)=>c+IBS_STD[y]);
+  const rateSemRed=CBS_STD.map((c,y)=>c+IBS_STD[y]*PCT_IBS[y]);
+  const rate30=rateSemRed.map(r=>r*0.7), rate50=aliqImob.slice(), rate70=rateSemRed.map(r=>r*0.3);
+  const receita=inp.vendasValor.map((v,y)=>v+(inp.receitaFin[y]||0));
+  const cu=inp.custos, liq={}, ibsc={}, tot={};
+  const mk=(key,liqFn,rate)=>{liq[key]=[];ibsc[key]=[];tot[key]=[];
+    for(let y=0;y<N;y++){const l=liqFn(cu[key][y]||0,y);const i=l*rate[y];liq[key].push(l);ibsc[key].push(i);tot[key].push(l+i);}};
+  mk('servSem',b=>b*(1-A.pcServ-A.iss),rateSemRed);
+  mk('serv30',b=>b*(1-A.pcServ-A.iss),rate30);
+  mk('serv50',b=>b*(1-A.pcServ-A.iss),rate50);
+  mk('locImoveis',b=>b*(1-A.pcServ),rate70);
+  mk('locEquip',b=>b*(1-A.pcServ),rateFull);
+  mk('matICMS',b=>(b-b*(A.icms+A.ipi))*(1-A.pcMat),rateFull);
+  mk('matSem',b=>b*(1-A.pcMat),rateFull);
+  const terrReceita=ANOS.map((_,y)=>inp.terrenoCompra2027?.[y]||0);
+  const terrDed=ANOS.map((_,y)=>-(inp.raCompraContrib[y]||0)+(inp.raPermFinContrib[y]||0)+(inp.raTorna[y]||0));
+  const terrBC=terrReceita.map((r,y)=>r+terrDed[y]);
+  const terrIBS=terrBC.map((b,y)=>b*aliqImob[y]);
+  const terrTot=terrReceita.map((r,y)=>r+terrIBS[y]);
+  const creditoFull=ANOS.map((_,y)=>terrIBS[y]+ibsc.servSem[y]+ibsc.serv30[y]+ibsc.serv50[y]+ibsc.locImoveis[y]+ibsc.locEquip[y]+ibsc.matICMS[y]+ibsc.matSem[y]);
+  const credito=creditoFull.map(c=>c*inp.pctEstoque);
+  const deduBase=ANOS.map((_,y)=>liq.servSem[y]+liq.serv30[y]+liq.serv50[y]+liq.matICMS[y]+liq.matSem[y]);
+  const contrib=deduBase.map((b,y)=>b*FATOR_ICMS_ISS[y]);
+  const row88=[0,0,contrib[0]+contrib[1]+contrib[2],contrib[3],contrib[4],contrib[5],0];
+  const creditoDedu=row88.map(v=>v*inp.pctEstoque);
+  const vRS=inp.tipo==='LOT'?30000:100000;
+  const ipcaRS=[]; ipcaRS[0]=1.041*(1+A.ipcaFut)-1;
+  for(let y=1;y<N;y++) ipcaRS[y]=(1+ipcaRS[y-1])*(1+A.ipcaFut)-1;
+  const pctRS=inp.pctLoteador+inp.pctIncorporador;
+  const redSocial=ANOS.map((_,y)=>vRS*(1+ipcaRS[y])*(inp.vendasQtde[y]||0)*pctRS);
+  let custoAtual=0;
+  if(!inp.semTerrenoAte2026){
+    if(inp.terrenoAno<=2026) custoAtual+=inp.terrenoValor*(1+ipcaAcumAte2026(inp.terrenoAno));
+    for(const [anoS,val] of Object.entries(inp.construcao)){const ano=+anoS; if(val&&ano>=2000&&ano<=2026) custoAtual+=val*(1+ipcaAcumAte2026(ano));}
+  }
+  const al11=custoAtual*inp.pctEstoque;
+  const al16=inp.semTerrenoAte2026?0:Math.max(al11,inp.valorReferencia);
+  const itbiPago=inp.terrenoAno<=2026?inp.terrenoValor*A.itbi:0;
+  const itbiRA=itbiPago*(1+ipcaAcumAte2026(inp.terrenoAno))*inp.pctEstoque;
+  const raTerr27porAno=ANOS.map((_,y)=>(inp.raCompraContrib[y]||0)+(inp.raCompraNaoContrib[y]||0)+(inp.raPermFinContrib[y]||0)+(inp.raPermFinNaoContrib[y]||0)+(inp.raPermFisContrib[y]||0)+(inp.raTorna[y]||0)+(inp.raMandato[y]||0)+(inp.raParceriaLot[y]||0)+(inp.raAporteNaoContrib[y]||0)+(inp.raAporteContrib[y]||0));
+  const raTerr27=sum(raTerr27porAno);
+  const itbi2027=raTerr27porAno.map(v=>v*A.itbi);
+  const contrIncorrida=sum(inp.contrapartidas);
+  const pctRA=inp.pctLoteador+inp.pctIncorporador;
+  let ibscbs=new Array(N).fill(0);
+  let ra72=new Array(N).fill(0), base7=new Array(N).fill(0);
+  let comp=new Array(N).fill(0), saldoIni=new Array(N).fill(0), saldoFim=new Array(N).fill(0);
+  let cbsAp=new Array(N).fill(0), ibsAp=new Array(N).fill(0);
+  let vgvLiq=new Array(N).fill(0);
+  let al62=0, contrap=0, contrapPorAreaDoada=false, raSubtotal=0;
+  for(let it=0;it<200;it++){
+    vgvLiq=receita.map((r,y)=>r-ibscbs[y]);
+    const sVgv=sum(vgvLiq);
+    const contrArea=sum(vgvLiq.map(v=>v*inp.pctAreaDoada));
+    contrap=Math.max(contrIncorrida,contrArea);
+    contrapPorAreaDoada=contrArea>contrIncorrida;
+    raSubtotal=al16+itbiRA+raTerr27+(contrapPorAreaDoada?0:contrIncorrida);
+    al62=raSubtotal*pctRA+(contrapPorAreaDoada?contrArea:0);
+    ra72=vgvLiq.map((v,y)=>sVgv!==0?al62*(v/sVgv)*Math.pow(1+A.ipcaFut,y+1):0);
+    base7=receita.map((r,y)=>Math.max(r-ibscbs[y]-ra72[y]-redSocial[y],0));
+    let saldo=0; const novo=[];
+    for(let y=0;y<N;y++){
+      saldoIni[y]=saldo;
+      const avail=saldo+creditoDedu[y];
+      comp[y]=Math.min(base7[y],avail);
+      saldo=avail-comp[y]; saldoFim[y]=saldo;
+      const baseIBS=Math.max(base7[y]-comp[y],0);
+      cbsAp[y]=base7[y]*aliqCBSimob[y];
+      ibsAp[y]=baseIBS*aliqIBSimob[y];
+      novo.push(cbsAp[y]+ibsAp[y]);
+    }
+    const delta=novo.reduce((m,v,y)=>Math.max(m,Math.abs(v-ibscbs[y])),0);
+    ibscbs=novo;
+    if(delta<1e-9) break;
+  }
+  const retDC=new Array(N).fill(0), irpjDC=new Array(N).fill(0), csllDC=new Array(N).fill(0);
+  const aliqRET_IR=inp.tipo==='RET4'?0.0192:inp.tipo==='RET1'?0.0047:(inp.aliqRetIR??(0.7*0.0192+0.3*0.0047));
+  for(let y=0;y<N;y++){
+    if(inp.tipo==='LOT'){
+      const base=vgvLiq[y], r5=Math.min(base,5000000), rAc=Math.max(base-5000000,0);
+      const bIR=r5*0.08+rAc*0.088;
+      irpjDC[y]=bIR*0.15+Math.max(bIR-240000,0)*0.10;
+      csllDC[y]=(r5*0.12+rAc*0.132)*0.09;
+    } else retDC[y]=vgvLiq[y]*aliqRET_IR;
+  }
+  const irpjCsllDC=ANOS.map((_,y)=>retDC[y]+irpjDC[y]+csllDC[y]);
+  const aliqPC=inp.tipo==='LOT'?A.pcServ:inp.tipo==='RET4'?0.0208:inp.tipo==='RET1'?0.0053:(inp.aliqRetPC??(0.7*0.0208+0.3*0.0053));
+  const pisCofOp=receita.map(r=>r*aliqPC);
+  const irpjCsllOp=new Array(N).fill(0);
+  for(let y=0;y<N;y++){
+    if(inp.tipo==='LOT'){
+      const r5=Math.min(receita[y],5000000), rAc=Math.max(receita[y]-5000000,0);
+      const bIR=r5*0.08+rAc*0.088;
+      irpjCsllOp[y]=bIR*0.15+Math.max(bIR-240000,0)*0.10+(r5*0.12+rAc*0.132)*0.09;
+    } else irpjCsllOp[y]=receita[y]*aliqRET_IR;
+  }
+  const tribOp=ANOS.map((_,y)=>pisCofOp[y]+irpjCsllOp[y]);
+  const tribDC=ANOS.map((_,y)=>ibscbs[y]+irpjCsllDC[y]);
+  const custosAno=ANOS.map((_,y)=>(cu.maoObra[y]||0)+tot.servSem[y]+tot.serv30[y]+tot.serv50[y]+tot.locImoveis[y]+tot.locEquip[y]+tot.matICMS[y]+tot.matSem[y]+(cu.simples[y]||0)+(inp.contrapartidas[y]||0)+terrReceita[y]+itbi2027[y]);
+  const ate2026=(inp.terrenoAno<=2026?inp.terrenoValor:0)+itbiPago+Object.entries(inp.construcao).reduce((a,[ano,v])=>a+(+ano>=2000&&+ano<=2026?(v||0):0),0);
+  const totalOp=sum(receita)-ate2026-sum(custosAno)-sum(tribOp);
+  const totalDC=sum(receita)-ate2026-sum(custosAno)+sum(credito)-sum(tribDC);
+  const x26=totalDC-totalOp;
+  const economia=Math.abs(x26);
+  const melhorRegime=x26>=0?'DC':'OP';
+  const cargaOpTotal=sum(receita)?(sum(tribOp)+sum(credito))/sum(receita):0;
+  const cargaDCTotal=sum(receita)?sum(tribDC)/sum(receita):0;
+  return {economia,melhorRegime,cargaOpTotal,cargaDCTotal,receita,credito,ibscbs};
+}
+
+// ============================================================
+// INTERFACE
+// ============================================================
+const fmt=v=>v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmtPct=v=>(v*100).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+'%';
+const fmtRS=v=>'R$ '+fmt(v);
+function parseBR(s){ if(typeof s==='number') return s; s=(s||'').toString().trim(); if(!s) return 0;
+  s=s.replace(/[R$\s]/g,'').replace(/\./g,'').replace(',','.'); const v=parseFloat(s); return isNaN(v)?0:v; }
+function isMoneyInput(el){ return el&&el.tagName==='INPUT'&&((el.className||'').indexOf('money')>=0); }
+function formatMoneyField(el){ const v=parseBR(el.value); el.value=v?fmtRS(v):''; }
+
+function moneyRow(id,label,defaults,isMoney=true,rowClass=''){
+  let h=`<tr class="${rowClass}"><td>${label}</td>`;
+  for(let y=0;y<N;y++){
+    const val=defaults[y]?(isMoney?fmtRS(defaults[y]):defaults[y].toLocaleString('pt-BR',{maximumFractionDigits:0})):'';
+    h+=`<td><input data-grid="${id}" data-y="${y}" type="text" class="${isMoney?'money':''}" value="${val}"></td>`;
+  }
+  return h+'</tr>';
+}
+function headRow(){ return '<tr><th></th>'+ROT_ANOS.map(a=>`<th>${a}</th>`).join('')+'</tr>'; }
+
+// Vendas
+document.getElementById('tblVendas').innerHTML = headRow()
+ + moneyRow('vendasQtde','Qtde de unidades residenciais vendidas',[10,10,10,10,10,10,10],false)
+ + moneyRow('vendasValor','Valor de vendas com impostos — sem permuta física',[10000000,10000000,10000000,10000000,10000000,10000000,10000000])
+ + moneyRow('receitaFin','Receita financeira e outras de contrato',[0,0,0,0,0,0,0]);
+
+// RA terreno 2027+
+const RA_CATS=[
+ ['raCompraContrib','Compra de contribuinte — RA adotado pelo terrenista'],
+ ['raCompraNaoContrib','Compra de não contribuinte — valor da operação'],
+ ['raPermFinContrib','Permuta financeira de contribuinte — RA do terrenista'],
+ ['raPermFinNaoContrib','Permuta financeira de não contribuinte — valor da operação'],
+ ['raPermFisContrib','Permuta física s/ torna de contribuinte — RA × % mantido'],
+ ['raTorna','Torna paga na permuta física de contribuinte'],
+ ['raMandato','Incorporação por mandato — RA × % do incorporador'],
+ ['raParceriaLot','Parceria em loteamento — RA × % do loteador'],
+ ['raAporteNaoContrib','Aporte em SCP/SPE por não contribuinte — valor do aporte'],
+ ['raAporteContrib','Aporte em SCP/SPE por contribuinte — RA do investidor']];
+document.getElementById('tblRAcompra').innerHTML = headRow()
+ + moneyRow('terrenoCompra2027','Valor de aquisição do terreno a partir de 2027 (sem IBS/CBS) — operação tributada pelo proprietário do terreno',[0,0,0,0,0,0,0]);
+document.getElementById('raHipotese').innerHTML = RA_CATS.map(([id,lab])=>`<option value="${id}">${lab}</option>`).join('');
+document.getElementById('tblRA').innerHTML = headRow()
+ + RA_CATS.map(([id,lab])=>moneyRow(id,lab,[0,0,0,0,0,0,0],true,`ra-cat ra-${id}`)).join('');
+function updateRaCatVisibility(){
+  const sel=document.getElementById('raHipotese').value;
+  document.querySelectorAll('.ra-cat').forEach(tr=>{
+    tr.style.display=(tr.className||'').split(/\s+/).indexOf('ra-'+sel)>=0?'':'none';
+  });
+}
+
+// Contrapartidas
+document.getElementById('tblContrap').innerHTML = headRow()+moneyRow('contrapartidas','Contrapartida incorrida e/ou estimada',[0,0,0,0,0,0,0]);
+
+// Custos
+const CUSTO_CATS=[
+ ['maoObra','Mão de obra própria'],
+ ['servSem','Prestadores de serviço sem redução de alíquota IBS/CBS'],
+ ['serv30','Prestadores de serviço com 30% de redução (profissionais liberais)'],
+ ['serv50','Prestadores de serviço com 50% de redução (empreiteiros/corretores)'],
+ ['locImoveis','Locação de imóveis (redução 70%)'],
+ ['locEquip','Locação de equipamentos (sem redução)'],
+ ['matICMS','Material sujeito a ICMS e IPI (sem redução)'],
+ ['matSem','Material sem ICMS e IPI (sem redução)'],
+ ['simples','Fornecedor Simples Nacional (sem crédito)']];
+const CUSTO_DEF={maoObra:[12000000,0,0,0,0,0,0],servSem:[1000000,0,0,0,0,0,0],serv30:[1000000,0,0,0,0,0,0],serv50:[4000000,0,0,0,0,0,0],locImoveis:[0,0,0,0,0,0,0],locEquip:[2000000,0,0,0,0,0,0],matICMS:[10000000,0,0,0,0,0,0],matSem:[0,0,0,0,0,0,0],simples:[9000000,0,0,0,0,0,0]};
+document.getElementById('tblCustos').innerHTML = headRow()+CUSTO_CATS.map(([id,lab])=>moneyRow(id,lab,CUSTO_DEF[id])).join('');
+
+// Ano de aquisição do terreno
+(function(){
+  const sel=document.getElementById('terrenoAno');
+  let h=sel.innerHTML;
+  for(let a=2000;a<=2026;a++) h+=`<option value="${a}" ${a===2020?'selected':''}>${a}</option>`;
+  sel.innerHTML=h;
+})();
+
+// Construção até 2026
+function addConstrucao(ano,valor){
+  const div=document.createElement('div');
+  div.className='linha-construcao';
+  let anos=''; for(let a=2000;a<=2026;a++) anos+=`<option value="${a}" ${a===(ano??2024)?'selected':''}>${a}</option>`;
+  div.innerHTML=`<select class="constr-ano">${anos}</select>
+    <input class="constr-valor money" type="text" placeholder="R$" value="${valor?fmtRS(valor):''}" style="max-width:200px">
+    <button type="button" class="rm" onclick="this.parentNode.remove();recalc()">×</button>`;
+  document.getElementById('construcoes').appendChild(div);
+  div.querySelectorAll('input,select').forEach(el=>el.addEventListener('change',recalc));
+}
+addConstrucao(2024,40000000);
+
+function gridVals(id){
+  const out=[0,0,0,0,0,0,0];
+  document.querySelectorAll(`input[data-grid="${id}"]`).forEach(el=>{out[+el.dataset.y]=parseBR(el.value);});
+  return out;
+}
+
+function readInputs(){
+  const construcao={};
+  document.querySelectorAll('.linha-construcao').forEach(l=>{
+    const ano=+l.querySelector('.constr-ano').value, v=parseBR(l.querySelector('.constr-valor').value);
+    if(v) construcao[ano]=(construcao[ano]||0)+v;
+  });
+  const tipoSel=document.getElementById('tipo').value;
+  const isLot=tipoSel==='LOT';
+  const inp={
+    tipo:tipoSel,
+    pctEstoque:parseFloat(document.getElementById('pctEstoque').value||0)/100,
+    valorReferencia:parseBR(document.getElementById('valorReferencia').value),
+    vendasQtde:gridVals('vendasQtde'), vendasValor:gridVals('vendasValor'), receitaFin:gridVals('receitaFin'),
+    pctLoteador:isLot?parseFloat(document.getElementById('pctLoteador').value||0)/100:0,
+    pctAreaDoada:isLot?parseFloat(document.getElementById('pctAreaDoada').value||0)/100:0,
+    pctIncorporador:isLot?0:parseFloat(document.getElementById('pctIncorporador').value||0)/100,
+    semTerrenoAte2026:document.getElementById('terrenoAno').value==='NA',
+    terrenoAno:document.getElementById('terrenoAno').value==='NA'?2020:Math.min(+document.getElementById('terrenoAno').value||2020,2026),
+    terrenoValor:document.getElementById('terrenoAno').value==='NA'?0:parseBR(document.getElementById('terrenoValor').value),
+    aliqRetPC:parseFloat(document.getElementById('aRetPC').value||0)/100,
+    aliqRetIR:parseFloat(document.getElementById('aRetIR').value||0)/100,
+    construcao, contrapartidas:gridVals('contrapartidas'),
+    terrenoCompra2027:gridVals('terrenoCompra2027'),
+    custos:{}, aliq:{
+      itbi:parseFloat(document.getElementById('aItbi').value||0)/100,
+      pcServ:parseFloat(document.getElementById('aPcServ').value||0)/100,
+      pcMat:parseFloat(document.getElementById('aPcMat').value||0)/100,
+      iss:parseFloat(document.getElementById('aIss').value||0)/100,
+      icms:parseFloat(document.getElementById('aIcms').value||0)/100,
+      ipi:parseFloat(document.getElementById('aIpi').value||0)/100,
+      ipcaFut:parseFloat(document.getElementById('aIpca').value||0)/100
+    }
+  };
+  RA_CATS.forEach(([id])=>inp[id]=gridVals(id));
+  CUSTO_CATS.forEach(([id])=>inp.custos[id]=gridVals(id));
+  return inp;
+}
+
+const TIPO_NOMES2={RET4:'Incorporação RET 4%',RET1:'Incorporação RET 1%',MISTO:'Incorporação RET 1% e RET 4%',LOT:'Loteamento'};
+
+function recalc(){
+  const inp=readInputs(), r=compute(inp);
+  const isMisto=inp.tipo==='MISTO';
+  document.getElementById('campoRetPC').style.display=isMisto?'':'none';
+  document.getElementById('campoRetIR').style.display=isMisto?'':'none';
+  const ehLot=inp.tipo==='LOT';
+  document.getElementById('campoPctLot').style.display=ehLot?'':'none';
+  document.getElementById('campoPctArea').style.display=ehLot?'':'none';
+  document.getElementById('campoPctInc').style.display=ehLot?'none':'';
+  updateRaCatVisibility();
+  const preench=RA_CATS.filter(([id])=>inp[id]&&inp[id].some(v=>v>0)).map(([,lab])=>lab.split(' — ')[0]);
+  document.getElementById('raPreenchidas').textContent=preench.length?('Hipóteses com valores informados: '+preench.join('; ')+'.'):'';
+  document.getElementById('cEconomia').textContent='R$ '+fmt(r.economia);
+  // atualiza link de contato com as premissas
+  const corpo='Olá, usei a calculadora IBS/CBS e quero o relatório completo.%0A'
+    +'Tipo: '+(TIPO_NOMES2[inp.tipo]||inp.tipo)+'%0A'
+    +'VGV 2027+: R$ '+fmt(r.receita.reduce((a,b)=>a+b,0))+'%0A'
+    +'Ganho tributário estimado: R$ '+fmt(r.economia);
+  const cont=document.getElementById('btnContato');
+  if(cont) cont.href='mailto:claudio.ricaldoni@terreo.io?subject='+encodeURIComponent('Relatório IBS/CBS — calculadora Térreo')+'&body='+corpo;
+}
+
+let tmr=null;
+function recalcDebounced(){ clearTimeout(tmr); tmr=setTimeout(recalc,250); }
+document.addEventListener('change',e=>{
+  if(e.target.matches('input,select')){
+    if(isMoneyInput(e.target)) formatMoneyField(e.target);
+    recalc();
+  }
+});
+document.addEventListener('input',e=>{ if(e.target.matches('input,select')) recalcDebounced(); });
+
+document.getElementById('btnRecalc').addEventListener('click',function(){
+  recalc();
+  this.classList.remove('flash'); void this.offsetWidth; this.classList.add('flash');
+  this.textContent='✓ Recalculado'; setTimeout(()=>this.textContent='↻ Recalcular',1200);
+});
+
+// FAQ accordion
+document.querySelectorAll('.faq-q').forEach(q=>{
+  q.addEventListener('click',()=>{
+    const item=q.closest('.faq-item');
+    const wasOpen=item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+    if(!wasOpen) item.classList.add('open');
+  });
+});
+
+recalc();
+</script>
+</body>
+</html>
