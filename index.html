@@ -131,6 +131,14 @@ nav{position:sticky;top:0;z-index:100;background:var(--verde);box-shadow:0 2px 1
 /* botão genérico dentro da calculadora */
 .calc-wrap button[type=button]:not(#btnRecalc){background:var(--verde);color:#fff;border:none;border-radius:6px;padding:7px 14px;font-size:13px;cursor:pointer;font-weight:600}
 .calc-wrap button[type=button]:not(#btnRecalc):hover{background:var(--verde-claro)}
+.calc-wrap .tip{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;border-radius:50%;
+  background:var(--verde-claro);color:#fff;font-size:9.5px;font-weight:700;cursor:help;
+  margin-left:4px;vertical-align:middle;flex-shrink:0;font-style:normal;user-select:none}
+.calc-wrap summary .tip{margin-left:6px;vertical-align:middle}
+#tt{position:fixed;z-index:9999;max-width:400px;background:#1d2521;color:#fff;
+  font-size:12px;line-height:1.6;padding:12px 16px;border-radius:8px;
+  pointer-events:none;white-space:pre-wrap;box-shadow:0 4px 20px rgba(0,0,0,.4);
+  display:none;text-align:left;border-left:4px solid var(--destaque)}
 
 /* ====== RELATÓRIO ====== */
 .relatorio{background:var(--verde);color:#fff;padding:80px 28px}
@@ -314,41 +322,41 @@ footer{background:var(--verde-escuro);color:rgba(255,255,255,.7);padding:48px 28
     <h2 class="sec">1. Premissas</h2>
 
     <details open>
-      <summary>Dados do empreendimento</summary>
+      <summary>Dados do empreendimento <span class="tip" data-key="dados" onclick="event.stopPropagation()">ⓘ</span></summary>
       <div class="inner grid">
-        <div class="campo"><label>Tipo</label>
+        <div class="campo"><label>Tipo <span class="tip" data-key="tipo">ⓘ</span></label>
           <select id="tipo">
             <option value="RET4">Incorporação RET 4%</option>
             <option value="RET1">Incorporação RET 1%</option>
             <option value="MISTO">Incorporação RET 1% e RET 4%</option>
             <option value="LOT">Loteamento</option>
           </select></div>
-        <div class="campo" id="campoRetPC" style="display:none"><label>Alíquota média RET — PIS e Cofins (%)</label><input id="aRetPC" type="number" step="0.001" value="1.615"></div>
-        <div class="campo" id="campoRetIR" style="display:none"><label>Alíquota média RET — IRPJ e CSLL (%)</label><input id="aRetIR" type="number" step="0.001" value="1.485"></div>
-        <div class="campo"><label>% unidades em estoque em 31/12/2026 passíveis de venda</label><input id="pctEstoque" type="number" step="0.01" value="40"></div>
-        <div class="campo"><label>Valor de mercado do estoque em 31/12/2026</label><input id="valorReferencia" type="text" class="money" value="R$ 50.000.000,00"></div>
-        <div class="campo" id="campoPctLot" style="display:none"><label>% receita do loteador (parceria PN 15/84)</label><input id="pctLoteador" type="number" step="0.01" value="100"></div>
-        <div class="campo" id="campoPctArea" style="display:none"><label>% área doada (loteamento)</label><input id="pctAreaDoada" type="number" step="0.01" value="0"></div>
-        <div class="campo" id="campoPctInc"><label>% receita do incorporador</label><input id="pctIncorporador" type="number" step="0.01" value="100"></div>
+        <div class="campo" id="campoRetPC" style="display:none"><label>Alíquota média RET — PIS e Cofins (%) <span class="tip" data-key="retPisCof">ⓘ</span></label><input id="aRetPC" type="number" step="0.001" value="1.615"></div>
+        <div class="campo" id="campoRetIR" style="display:none"><label>Alíquota média RET — IRPJ e CSLL (%) <span class="tip" data-key="retIrpj">ⓘ</span></label><input id="aRetIR" type="number" step="0.001" value="1.485"></div>
+        <div class="campo"><label>% unidades em estoque em 31/12/2026 passíveis de venda <span class="tip" data-key="pctEstoque">ⓘ</span></label><input id="pctEstoque" type="number" step="0.01" value="40"></div>
+        <div class="campo"><label>Valor de mercado do estoque em 31/12/2026 <span class="tip" data-key="valorRef">ⓘ</span></label><input id="valorReferencia" type="text" class="money" value="R$ 50.000.000,00"></div>
+        <div class="campo" id="campoPctLot" style="display:none"><label>% receita do loteador (parceria PN 15/84) <span class="tip" data-key="pctLot">ⓘ</span></label><input id="pctLoteador" type="number" step="0.01" value="100"></div>
+        <div class="campo" id="campoPctArea" style="display:none"><label>% área doada (loteamento) <span class="tip" data-key="pctArea">ⓘ</span></label><input id="pctAreaDoada" type="number" step="0.01" value="0"></div>
+        <div class="campo" id="campoPctInc"><label>% receita do incorporador <span class="tip" data-key="pctInc">ⓘ</span></label><input id="pctIncorporador" type="number" step="0.01" value="100"></div>
       </div>
     </details>
 
     <details open>
-      <summary>Vendas a partir de 2027</summary>
+      <summary>Vendas a partir de 2027 <span class="tip" data-key="vendas" onclick="event.stopPropagation()">ⓘ</span></summary>
       <div class="inner tblwrap"><table id="tblVendas"></table></div>
     </details>
 
     <details open>
-      <summary>Terreno e construção até 2026 (Redutor de Ajuste)</summary>
+      <summary>Terreno e construção até 2026 (Redutor de Ajuste) <span class="tip" data-key="terreno26" onclick="event.stopPropagation()">ⓘ</span></summary>
       <div class="inner">
         <div class="grid" style="margin-bottom:12px">
-          <div class="campo"><label>Ano de aquisição do terreno (até 2026)</label>
+          <div class="campo"><label>Ano de aquisição do terreno (até 2026) <span class="tip" data-key="terrenoAno">ⓘ</span></label>
             <select id="terrenoAno">
               <option value="NA">Não aplicável — aquisição a partir de 2027</option>
             </select></div>
-          <div class="campo"><label>Valor de aquisição do terreno, sem IBS/CBS</label><input id="terrenoValor" type="text" class="money" value="R$ 10.000.000,00"></div>
+          <div class="campo"><label>Valor de aquisição do terreno, sem IBS/CBS <span class="tip" data-key="terrenoVal">ⓘ</span></label><input id="terrenoValor" type="text" class="money" value="R$ 10.000.000,00"></div>
         </div>
-        <label style="font-size:11.5px;color:var(--cinza);font-weight:600">Custo de construção até 2026 (por ano)</label>
+        <label style="font-size:11.5px;color:var(--cinza);font-weight:600">Custo de construção até 2026 (por ano) <span class="tip" data-key="construcao">ⓘ</span></label>
         <div id="construcoes" style="margin-top:6px"></div>
         <button type="button" onclick="addConstrucao()">+ adicionar ano de construção</button>
         <p class="nota">Terreno e construção até 2026 são atualizados pelo IPCA histórico e multiplicados pelo % de estoque. O Redutor de Ajuste será o maior entre esse custo atualizado e o valor de mercado do estoque.</p>
@@ -356,10 +364,10 @@ footer{background:var(--verde-escuro);color:rgba(255,255,255,.7);padding:48px 28
     </details>
 
     <details>
-      <summary>Redutor de Ajuste — terreno adquirido a partir de 2027</summary>
+      <summary>Redutor de Ajuste — terreno adquirido a partir de 2027 <span class="tip" data-key="terreno27" onclick="event.stopPropagation()">ⓘ</span></summary>
       <div class="inner">
         <div class="tblwrap"><table id="tblRAcompra"></table></div>
-        <div class="campo" style="margin-top:12px;max-width:680px"><label>Hipótese de aquisição do terreno</label>
+        <div class="campo" style="margin-top:12px;max-width:680px"><label>Hipótese de aquisição do terreno <span class="tip" data-key="raHip">ⓘ</span></label>
           <select id="raHipotese"></select></div>
         <div class="tblwrap"><table id="tblRA"></table></div>
         <p class="nota" id="raPreenchidas"></p>
@@ -368,27 +376,27 @@ footer{background:var(--verde-escuro);color:rgba(255,255,255,.7);padding:48px 28
     </details>
 
     <details>
-      <summary>Contrapartidas ambientais e urbanísticas (a partir de 2027)</summary>
+      <summary>Contrapartidas ambientais e urbanísticas (a partir de 2027) <span class="tip" data-key="contrapartidas" onclick="event.stopPropagation()">ⓘ</span></summary>
       <div class="inner tblwrap"><table id="tblContrap"></table>
       <p class="nota">O modelo adota automaticamente o maior entre a contrapartida incorrida/estimada e a calculada pelo % de área doada sobre a receita líquida.</p></div>
     </details>
 
     <details open>
-      <summary>Custos e despesas a partir de 2027</summary>
+      <summary>Custos e despesas a partir de 2027 <span class="tip" data-key="custos" onclick="event.stopPropagation()">ⓘ</span></summary>
       <div class="inner tblwrap"><table id="tblCustos"></table>
       <p class="nota">Valores com a carga tributária atual (PIS/Cofins, ISS, ICMS, IPI embutidos). O simulador converte para o novo cenário com IBS/CBS conforme a transição.</p></div>
     </details>
 
     <details>
-      <summary>Alíquotas e IPCA</summary>
+      <summary>Alíquotas e IPCA <span class="tip" data-key="aliquotas" onclick="event.stopPropagation()">ⓘ</span></summary>
       <div class="inner grid">
-        <div class="campo"><label>ITBI (%)</label><input id="aItbi" type="number" step="0.01" value="3"></div>
-        <div class="campo"><label>PIS/Cofins serviço (%)</label><input id="aPcServ" type="number" step="0.01" value="3.65"></div>
-        <div class="campo"><label>PIS/Cofins material (%)</label><input id="aPcMat" type="number" step="0.01" value="9.25"></div>
-        <div class="campo"><label>ISS médio (%)</label><input id="aIss" type="number" step="0.01" value="2"></div>
-        <div class="campo"><label>ICMS médio (%)</label><input id="aIcms" type="number" step="0.01" value="18"></div>
-        <div class="campo"><label>IPI médio (%)</label><input id="aIpi" type="number" step="0.01" value="10"></div>
-        <div class="campo"><label>IPCA anual a partir de 2027 (%)</label><input id="aIpca" type="number" step="0.01" value="5"></div>
+        <div class="campo"><label>ITBI (%) <span class="tip" data-key="aliqItbi">ⓘ</span></label><input id="aItbi" type="number" step="0.01" value="3"></div>
+        <div class="campo"><label>PIS/Cofins serviço (%) <span class="tip" data-key="aliqPcServ">ⓘ</span></label><input id="aPcServ" type="number" step="0.01" value="3.65"></div>
+        <div class="campo"><label>PIS/Cofins material (%) <span class="tip" data-key="aliqPcMat">ⓘ</span></label><input id="aPcMat" type="number" step="0.01" value="9.25"></div>
+        <div class="campo"><label>ISS médio (%) <span class="tip" data-key="aliqIss">ⓘ</span></label><input id="aIss" type="number" step="0.01" value="2"></div>
+        <div class="campo"><label>ICMS médio (%) <span class="tip" data-key="aliqIcms">ⓘ</span></label><input id="aIcms" type="number" step="0.01" value="18"></div>
+        <div class="campo"><label>IPI médio (%) <span class="tip" data-key="aliqIpi">ⓘ</span></label><input id="aIpi" type="number" step="0.01" value="10"></div>
+        <div class="campo"><label>IPCA anual a partir de 2027 (%) <span class="tip" data-key="aliqIpca">ⓘ</span></label><input id="aIpca" type="number" step="0.01" value="5"></div>
       </div>
     </details>
 
@@ -862,6 +870,89 @@ document.querySelectorAll('.faq-q').forEach(q=>{
 });
 
 recalc();
+
+// ===== Tooltips (ⓘ) =====
+const TIPS = {
+  dados: `Preencha as informações básicas do empreendimento: tipo, percentual em estoque em 31/12/2026 e percentual de receita do loteador/incorporador.\n\nOs cálculos são realizados por empreendimento; as conclusões podem variar entre projetos distintos.`,
+
+  tipo: `Informar o tipo de empreendimento:\n\n• Loteamento — tributação pelo lucro presumido\n• Incorporação RET 4%\n• Incorporação RET 1%\n• Incorporação RET 1% e RET 4% (híbrido)\n\nOs arts. 485 e 486 da LC 214/25 permitem que incorporadores e loteadores permaneçam no RET ou lucro presumido para empreendimentos lançados até 2028.\n\nAtenção: a legislação ainda não esclareceu se o incorporador optante pelo RET/CBS pode aplicar simultaneamente RET 4% e RET 1% no mesmo empreendimento. Optamos por incluir essa possibilidade.`,
+
+  retPisCof: `Alíquota média do RET referente ao CBS e IBS (substitui o PIS/Cofins) na hipótese de Incorporação RET 1% e RET 4%.\n\nInformar a alíquota média ponderada entre as unidades sujeitas ao RET 1% e ao RET 4%.`,
+
+  retIrpj: `Alíquota média do RET para IRPJ e CSLL.\n\nO RET de IRPJ/CSLL permanece mesmo no regime de Débito e Crédito — nesse caso, a alíquota incide sobre o preço do imóvel líquido de IBS e CBS.`,
+
+  pctEstoque: `Percentual de unidades passíveis de venda a partir de 2027 em relação ao total do empreendimento.\n\nUsado para proporcionalizar créditos de IBS/CBS, Redutor de Ajuste e Dedução ICMS/ISS.\n\nObservações:\n• Considerar apenas unidades que se pretende vender.\n• Não incluir unidades a serem dadas em permuta física.\n• Em empreendimentos lançados após 31/12/2026, informar o % a ser vendido a partir de 2027 (exceto permutas).`,
+
+  valorRef: `Valor de mercado estimado das unidades em estoque em 31/12/2026 que serão vendidas a partir de 2027.\n\nAplicável apenas a imóveis já individualizados em nome da incorporadora/loteadora (arts. 256–258 da LC 214/25).\n\nEsse valor compõe o Redutor de Ajuste: o RA será o maior entre o custo atualizado pelo IPCA e este valor de referência.\n\nPara empreendimentos com apenas o terreno em 31/12/2026, informar o valor de mercado do terreno.\n\nEm parceria/mandato, informar o valor da receita estimada atribuída ao loteador/incorporador.`,
+
+  pctLot: `Em loteamento via parceria (terreno em nome do terrenista; loteador executa a infraestrutura; receita repartida por % contratual), os Redutores de Ajuste e Social são distribuídos por esse percentual.\n\nSe não houver parceria, informar 100%.`,
+
+  pctArea: `Percentual de área a ser doada ao Município (art. 22 da Lei 6.766/79).\n\nO sistema calcula automaticamente a contrapartida pelo % de área doada sobre a receita líquida e compara com os valores informados em Contrapartidas — adota automaticamente o maior dos dois.`,
+
+  pctInc: `Percentual da receita atribuída ao incorporador.\n\nEm incorporação por mandato, informar o % do incorporador; os Redutores de Ajuste e Social são proporcionalzados por esse %.\n\nSe não for incorporação por mandato, informar 100%.`,
+
+  vendas: `Informar a receita de venda por ano a partir de 2027 (valor com impostos, sem permuta física) e receita financeira/outras do contrato.\n\nSegregação por ano obrigatória pelas variações de alíquota de IBS/CBS de 2027 a 2033+.\n\nQtde de unidades residenciais: necessária para o cálculo do Redutor Social, segregada por ano em razão da atualização pelo IPCA.\n\nReceita financeira: informar no ano da venda da unidade (não à medida que for recebida).`,
+
+  terreno26: `Informar o ano e valor de aquisição do terreno e os custos de construção por ano até 2026.\n\nOs valores são atualizados pelo IPCA histórico acumulado do ano seguinte à aquisição até 2026 e multiplicados pelo % de unidades em estoque.\n\nO Redutor de Ajuste será o maior entre o custo atualizado e o "Valor de mercado do estoque em 31/12/2026".\n\nApenas gastos com documento fiscal devem compor o RA (gastos com folha não são incluídos).`,
+
+  terrenoAno: `Ano de aquisição do terreno, limitado a 2026.\n\nSelecionar "Não aplicável" para terrenos adquiridos a partir de 2027 — nesse caso, utilizar a seção "Redutor de Ajuste — terreno adquirido a partir de 2027".`,
+
+  terrenoVal: `Valor de aquisição do terreno sem IBS/CBS.\n\nSerá atualizado pelo IPCA histórico acumulado do ano seguinte à aquisição até 2026 e multiplicado pelo % de estoque para compor o Redutor de Ajuste.`,
+
+  construcao: `Custo de construção incorrido em cada ano até 2026.\n\nAtualizado pelo IPCA histórico. Apenas gastos suportados por documentos fiscais devem compor o Redutor de Ajuste — gastos com folha de pagamento não são incluídos.`,
+
+  terreno27: `Informar o Redutor de Ajuste por natureza da operação de aquisição do terreno a partir de 2027:\n\n• Compra de contribuinte → RA adotado pelo terrenista\n• Compra de não contribuinte → valor da operação\n• Permuta financeira de contribuinte → RA do terrenista\n• Permuta financeira de não contribuinte → valor da operação\n• Permuta física s/ torna de contribuinte → RA × % do imóvel mantido\n• Torna paga (permuta física de contribuinte) → valor pago\n• Incorporação por mandato → analogia com parceria (RA × % do incorporador)\n• Aporte em SCP/SPE por não contribuinte → valor do aporte (aumento de capital)\n• Aporte em SCP/SPE por contribuinte → RA do investidor\n\nO valor de aquisição gera receita do terrenista contribuinte com IBS/CBS (que vira crédito para o adquirente). O ITBI de 3% incide sobre a soma dos RAs do ano.`,
+
+  raHip: `Selecionar a hipótese correspondente à forma de aquisição do terreno.\n\nOs valores informados nas demais hipóteses são mantidos no cálculo — apenas a hipótese selecionada fica visível, mas todas contribuem para o total.`,
+
+  contrapartidas: `Valores que integrarão o Redutor de Ajuste: contrapartidas urbanísticas e ambientais pagas ou estimadas a pagar aos entes públicos em decorrência de legislação federal, estadual ou municipal.\n\nPara loteamentos com doação de área, o sistema calcula automaticamente o maior entre:\n(i) gastos incorridos e a incorrer informados aqui\n(ii) % de área doada × receita líquida\n\nAtenção: não incluir esses valores nos campos de Custos e despesas.`,
+
+  custos: `Informar os valores estimados por natureza e ano, com a carga tributária atual (PIS/Cofins, ISS, ICMS, IPI já embutidos).\n\nO simulador converte para o novo cenário tributário com IBS/CBS conforme a transição, com base nas alíquotas médias informadas.\n\nObs.: pagamentos a optantes pelo Simples Nacional não são calculados aqui (alíquotas variam por contribuinte e mês). O crédito de IBS/CBS é proporcionalizado pelo % de unidades em estoque em 31/12/2026.`,
+
+  aliquotas: `Informar as alíquotas tributárias médias ponderadas aplicáveis ao empreendimento.\n\nPremissas adotadas pelo sistema:\n• Serviços: PIS/Cofins cumulativo a 3,65%\n• Mercadorias: PIS/Cofins não cumulativo a 9,25%\n\nIPCA: informar taxa anual projetada. Por simplicidade, a atualização é aplicada a partir do ano seguinte ao gasto (ao invés de mensal).`,
+
+  aliqItbi: `Alíquota do ITBI aplicável no município do empreendimento.\n\nIncide sobre as aquisições de terreno a partir de 2027 (3% sobre a soma dos Redutores de Ajuste do ano) e compõe o próprio Redutor de Ajuste.`,
+
+  aliqPcServ: `Alíquota de PIS/Cofins sobre serviços (regime cumulativo). Padrão: 3,65%.\n\nUsada para calcular o crédito de transição ICMS/ISS e o crédito de IBS/CBS sobre insumos de serviços.`,
+
+  aliqPcMat: `Alíquota de PIS/Cofins sobre materiais (regime não cumulativo). Padrão: 9,25%.\n\nUsada para calcular o crédito de transição e o crédito de IBS/CBS sobre insumos de materiais e equipamentos.`,
+
+  aliqIss: `Alíquota média do ISS incidente sobre serviços contratados para o empreendimento.\n\nInformar a alíquota média ponderada pelos municípios dos prestadores de serviços.`,
+
+  aliqIcms: `Alíquota média do ICMS incidente sobre materiais adquiridos.\n\nInformar a alíquota média ponderada pelos estados de origem das mercadorias.`,
+
+  aliqIpi: `Alíquota média do IPI incidente sobre materiais adquiridos.\n\nInformar a alíquota média ponderada dos produtos sujeitos ao IPI.`,
+
+  aliqIpca: `IPCA anual projetado para os anos de 2027 em diante.\n\nUtilizado para atualizar o Redutor de Ajuste (proporcionalizado ao VGV de cada ano) e o Redutor Social (por unidade, a partir de fev/2025).`
+};
+
+document.querySelectorAll('.tip[data-key]').forEach(el => {
+  el.dataset.tip = TIPS[el.dataset.key] || '';
+});
+(function(){
+  const tt = document.createElement('div');
+  tt.id = 'tt';
+  document.body.appendChild(tt);
+  document.addEventListener('mouseenter', e => {
+    const el = e.target.closest('.tip[data-tip]');
+    if (!el || !el.dataset.tip) return;
+    tt.textContent = el.dataset.tip;
+    tt.style.display = 'block';
+  }, true);
+  document.addEventListener('mouseleave', e => {
+    if (e.target.closest('.tip')) { tt.style.display = 'none'; }
+  }, true);
+  document.addEventListener('mousemove', e => {
+    if (tt.style.display !== 'block') return;
+    let x = e.clientX + 16, y = e.clientY - 12;
+    const w = tt.offsetWidth || 400, h = tt.offsetHeight || 200;
+    if (x + w > window.innerWidth - 12) x = e.clientX - w - 16;
+    if (y + h > window.innerHeight - 12) y = e.clientY - h - 8;
+    if (y < 8) y = 8;
+    tt.style.left = x + 'px';
+    tt.style.top = y + 'px';
+  });
+})();
 </script>
 </body>
 </html>
