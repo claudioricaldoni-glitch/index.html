@@ -144,7 +144,10 @@ nav{position:sticky;top:0;z-index:100;background:var(--verde);box-shadow:0 2px 1
 .relatorio-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:32px}
 .relatorio-card .preco-label{font-size:12px;opacity:.65;font-weight:600;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px}
 .relatorio-card .preco{font-size:48px;font-weight:800;color:var(--destaque);line-height:1;margin-bottom:4px}
-.relatorio-card .preco-sub{font-size:13px;opacity:.65;margin-bottom:28px}
+.relatorio-card .preco-sub{font-size:13px;opacity:.65;margin-bottom:14px}
+.relatorio-card .doacao{font-size:12px;opacity:.8;text-align:center;margin-bottom:22px;line-height:1.5;background:rgba(255,255,255,.06);border-radius:8px;padding:10px 14px}
+.relatorio-card .doacao-mais{color:var(--destaque-claro);text-decoration:underline;margin-left:4px;cursor:pointer}
+.relatorio-card .doacao-detalhe{display:block;margin-top:6px;opacity:.75}
 .relatorio-card .btn-comprar{display:block;text-align:center;background:var(--destaque);color:#fff;text-decoration:none;font-weight:700;font-size:16px;padding:16px;border-radius:10px;box-shadow:0 4px 20px rgba(200,162,75,.4);transition:.2s;margin-bottom:14px}
 .relatorio-card .btn-comprar:hover{background:var(--destaque-claro)}
 .relatorio-card .btn-contato{display:block;text-align:center;color:rgba(255,255,255,.7);font-size:13.5px;text-decoration:none;transition:.15s}
@@ -443,6 +446,11 @@ footer{background:var(--verde-escuro);color:rgba(255,255,255,.7);padding:48px 28
       <div class="preco-label">Investimento</div>
       <div class="preco">R$ 1.479</div>
       <div class="preco-sub">por empreendimento · relatório em PDF</div>
+      <div class="doacao">
+        🤝 1% deste valor é doado ao Instituto Mano Down e à Missão em Apoio à Igreja Sofredora.
+        <a href="#" class="doacao-mais" onclick="this.nextElementSibling.style.display='inline';this.style.display='none';return false;">mais</a>
+        <span class="doacao-detalhe" style="display:none">O Instituto Mano Down apoia pessoas com síndrome de Down e suas famílias. A Missão em Apoio à Igreja Sofredora atua junto a cristãos perseguidos em diversos países. A Térreo destina parte de cada relatório vendido a essas causas.</span>
+      </div>
       <a href="PAYMENT_LINK_AQUI" class="btn-comprar" id="btnComprar">Adquirir relatório completo</a>
       <a href="mailto:claudio.ricaldoni@terreo.io?subject=Relatório IBS/CBS — calculadora Térreo" class="btn-contato" id="btnContato">ou fale diretamente com a Térreo →</a>
       <div class="garantia">Após o pagamento, você receberá o relatório em PDF com as premissas do empreendimento simulado. Dúvidas? Entre em contato antes de comprar.</div>
