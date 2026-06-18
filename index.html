@@ -615,9 +615,9 @@ function compute(inp){
     if(inp.terrenoAno<=2026) custoAtual+=inp.terrenoValor*(1+ipcaAcumAte2026(inp.terrenoAno));
     for(const [anoS,val] of Object.entries(inp.construcao)){const ano=+anoS; if(val&&ano>=2000&&ano<=2026) custoAtual+=val*(1+ipcaAcumAte2026(ano));}
   }
-  const al11=custoAtual*inp.pctEstoque;
-  const al15=custoAtual*(inp.pctEstoque-inp.pctEstoquePronto);
-  const al16=inp.semTerrenoAte2026?0:Math.max(al11,inp.valorReferencia+al15);
+  const al11=custoAtual*(inp.pctEstoque-inp.pctEstoquePronto);
+  const al15=custoAtual*inp.pctEstoquePronto;
+  const al16=inp.semTerrenoAte2026?0:al11+Math.max(inp.valorReferencia,al15);
   const itbiPago=inp.terrenoAno<=2026?inp.terrenoValor*A.itbi:0;
   const itbiRA=itbiPago*(1+ipcaAcumAte2026(inp.terrenoAno))*inp.pctEstoque;
   const raTerr27porAno=ANOS.map((_,y)=>(inp.raCompraContrib[y]||0)+(inp.raCompraNaoContrib[y]||0)+(inp.raPermFinContrib[y]||0)+(inp.raPermFinNaoContrib[y]||0)+(inp.raPermFisContrib[y]||0)+(inp.raTorna[y]||0)+(inp.raMandato[y]||0)+(inp.raParceriaLot[y]||0)+(inp.raAporteNaoContrib[y]||0)+(inp.raAporteContrib[y]||0));
@@ -630,16 +630,22 @@ function compute(inp){
   let comp=new Array(N).fill(0), saldoIni=new Array(N).fill(0), saldoFim=new Array(N).fill(0);
   let cbsAp=new Array(N).fill(0), ibsAp=new Array(N).fill(0);
   let vgvLiq=new Array(N).fill(0);
-  let al62=0, contrap=0, contrapPorAreaDoada=false, raSubtotal=0;
+  let al62=0, contrap=0, contrapPorAreaDoada=false, raSubtotal=0, al62Base=0, contrAreaPorAno=new Array(N).fill(0);
   for(let it=0;it<200;it++){
     vgvLiq=receita.map((r,y)=>r-ibscbs[y]);
     const sVgv=sum(vgvLiq);
     const contrArea=sum(vgvLiq.map(v=>v*inp.pctAreaDoada));
     contrap=Math.max(contrIncorrida,contrArea);
     contrapPorAreaDoada=contrArea>contrIncorrida;
+    contrAreaPorAno=vgvLiq.map(v=>v*inp.pctAreaDoada);
     raSubtotal=al16+itbiRA+raTerr27+(contrapPorAreaDoada?0:contrIncorrida);
-    al62=raSubtotal*pctRA+(contrapPorAreaDoada?contrArea:0);
-    ra72=vgvLiq.map((v,y)=>sVgv!==0?al62*(v/sVgv)*Math.pow(1+A.ipcaFut,y+1):0);
+    al62Base=raSubtotal*pctRA;
+    al62=al62Base+(contrapPorAreaDoada?contrArea:0);
+    ra72=vgvLiq.map((v,y)=>{
+      const propor=sVgv!==0?al62Base*(v/sVgv)*Math.pow(1+A.ipcaFut,y+1):0;
+      const areaDoadaAno=contrapPorAreaDoada?contrAreaPorAno[y]:0;
+      return propor+areaDoadaAno;
+    });
     base7=receita.map((r,y)=>Math.max(r-ibscbs[y]-ra72[y]-redSocial[y],0));
     let saldo=0; const novo=[];
     for(let y=0;y<N;y++){
